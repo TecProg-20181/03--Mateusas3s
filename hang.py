@@ -60,18 +60,22 @@ class GuessWhat:
         return available
 
 
+def printWelcome(secretWord):
+    print('Welcome to the game, Hangam!')
+    print('I am thinking of a word that is', len(secretWord), ' letters long.')
+    print('-------------')
+
+
 def hangman():
 
     words = Words()
     guess_what = GuessWhat()
 
     secretWord = words.loadWords().lower()
-
     guesses = 8
     lettersGuessed = []
-    print('Welcome to the game, Hangam!')
-    print('I am thinking of a word that is', len(secretWord), ' letters long.')
-    print('-------------')
+
+    printWelcome(secretWord)
 
     while(not(guess_what.isWordGuessed(secretWord, lettersGuessed)) and guesses > 0):
         print('You have ', guesses, 'guesses left.')
