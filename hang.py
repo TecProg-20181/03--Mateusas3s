@@ -3,8 +3,6 @@ import random
 
 class Words:
 
-    wordlist_filename = ""
-
     def __init__(self):
         self.wordlist_filename = "palavras.txt"
 
@@ -31,10 +29,9 @@ class Words:
 
 class GuessWhat:
 
-    guessed = ''
-
     def __init__(self):
         self.guessed = ''
+        self.guesses = 8
 
     def isWordGuessed(self, secretWord, lettersGuessed):
 
@@ -49,15 +46,28 @@ class GuessWhat:
 
         return True
 
+    def getGuesses(self):
+        return self.guesses
+
     def getGuessedWord(self):
         return self.guessed
 
-    def getAvailableLetters(self):
+    def showGuesses(self, guesses):
+        print('You have ', guesses, 'guesses left.')
+
+
+class availableLetter:
+
+    def __init__(self):
         import string
         # 'abcdefghijklmnopqrstuvwxyz'
-        available = string.ascii_lowercase
+        self.available = string.ascii_lowercase
 
-        return available
+    def getAvailableLetters(self):
+        return self.available
+
+    def showAvailable(self, available):
+        print('Available letters', available)
 
 
 def printWelcome(secretWord):
@@ -70,22 +80,27 @@ def hangman():
 
     words = Words()
     guess_what = GuessWhat()
+    available_letter = availableLetter()
 
     secretWord = words.loadWords().lower()
-    guesses = 8
+    guesses = guess_what.getGuesses()
     lettersGuessed = []
 
     printWelcome(secretWord)
 
-    while(not(guess_what.isWordGuessed(secretWord, lettersGuessed)) and guesses > 0):
-        print('You have ', guesses, 'guesses left.')
+    while(not(guess_what.isWordGuessed(secretWord, lettersGuessed))
+          and guesses > 0):
 
-        available = guess_what.getAvailableLetters()
+        guess_what.showGuesses(guesses)
+
+        available = available_letter.getAvailableLetters()
+
         for letter in available:
             if letter in lettersGuessed:
                 available = available.replace(letter, '')
 
-        print('Available letters', available)
+        available_letter.showAvailable(available)
+
         letter = input('Please guess a letter: ')
         if letter in lettersGuessed:
 
@@ -95,8 +110,8 @@ def hangman():
                     guessed += letter
                 else:
                     guessed += '_ '
-
             print('Oops! You have already guessed that letter: ', guessed)
+
         elif letter in secretWord:
             lettersGuessed.append(letter)
 
@@ -106,8 +121,8 @@ def hangman():
                     guessed += letter
                 else:
                     guessed += '_ '
-
             print('Good Guess: ', guessed)
+
         else:
             guesses -= 1
             lettersGuessed.append(letter)
@@ -118,8 +133,8 @@ def hangman():
                     guessed += letter
                 else:
                     guessed += '_ '
-
             print('Oops! That letter is not in my word: ',  guessed)
+
         print('------------')
 
     else:
