@@ -46,8 +46,19 @@ class GuessWhat:
 
         return True
 
+    def guessLetter(self, guessed, secretWord, lettersGuessed):
+        for letter in secretWord:
+            if letter in lettersGuessed:
+                guessed += letter
+            else:
+                guessed += '_ '
+        return guessed
+
     def getGuesses(self):
         return self.guesses
+
+    def putGuesses(self, guesses):
+        self.guesses = guesses
 
     def getGuessedWord(self):
         return self.guessed
@@ -77,7 +88,7 @@ def printWelcome(secretWord):
 
 
 def hangman():
-
+    # Creating objects ---------------------
     words = Words()
     guess_what = GuessWhat()
     available_letter = availableLetter()
@@ -91,6 +102,7 @@ def hangman():
     while(not(guess_what.isWordGuessed(secretWord, lettersGuessed))
           and guesses > 0):
 
+        guesses = guess_what.getGuesses()
         guess_what.showGuesses(guesses)
 
         available = available_letter.getAvailableLetters()
@@ -103,36 +115,24 @@ def hangman():
 
         letter = input('Please guess a letter: ')
         if letter in lettersGuessed:
-
-            guessed = guess_what.getGuessedWord()
-            for letter in secretWord:
-                if letter in lettersGuessed:
-                    guessed += letter
-                else:
-                    guessed += '_ '
+            guessed = guess_what.guessLetter(guess_what.getGuessedWord(),
+                                             secretWord,
+                                             lettersGuessed)
             print('Oops! You have already guessed that letter: ', guessed)
 
         elif letter in secretWord:
             lettersGuessed.append(letter)
-
-            guessed = guess_what.getGuessedWord()
-            for letter in secretWord:
-                if letter in lettersGuessed:
-                    guessed += letter
-                else:
-                    guessed += '_ '
+            guessed = guess_what.guessLetter(guess_what.getGuessedWord(),
+                                             secretWord,
+                                             lettersGuessed)
             print('Good Guess: ', guessed)
 
         else:
-            guesses -= 1
+            guess_what.putGuesses(guesses - 1)
             lettersGuessed.append(letter)
-
-            guessed = guess_what.getGuessedWord()
-            for letter in secretWord:
-                if letter in lettersGuessed:
-                    guessed += letter
-                else:
-                    guessed += '_ '
+            guessed = guess_what.guessLetter(guess_what.getGuessedWord(),
+                                             secretWord,
+                                             lettersGuessed)
             print('Oops! That letter is not in my word: ',  guessed)
 
         print('------------')
