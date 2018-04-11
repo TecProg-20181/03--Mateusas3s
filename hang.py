@@ -67,7 +67,7 @@ class GuessWhat:
         print('You have ', guesses, 'guesses left.')
 
 
-class availableLetter:
+class Letter:
 
     def __init__(self):
         import string
@@ -80,24 +80,33 @@ class availableLetter:
     def showAvailable(self, available):
         print('Available letters', available)
 
+    def letterDif(self, letter_dif, secretWord):
+        count_letter = 0
 
-def printWelcome(secretWord):
-    print('Welcome to the game, Hangam!')
-    print('I am thinking of a word that is', len(secretWord), ' letters long.')
-    print('-------------')
+        for letter in secretWord:
+            if letter in letter_dif:
+                count_letter += 1
+                letter_dif.replace('letter', '')
+
+        return count_letter
+
+    def funcname(self, parameter_list):
+        pass
 
 
 def hangman():
     # Creating objects ---------------------
     words = Words()
     guess_what = GuessWhat()
-    available_letter = availableLetter()
+    available_letter = Letter()
 
     secretWord = words.loadWords().lower()
     guesses = guess_what.getGuesses()
     lettersGuessed = []
 
-    printWelcome(secretWord)
+    print('Welcome to the game, Hangam!')
+    print('I am thinking of a word that is', len(secretWord), ' letters long.')
+    print('-------------')
 
     while(not(guess_what.isWordGuessed(secretWord, lettersGuessed))
           and guesses > 0):
@@ -112,6 +121,9 @@ def hangman():
                 available = available.replace(letter, '')
 
         available_letter.showAvailable(available)
+        letters_remaining = available_letter.letterDif(available, secretWord)
+
+        print(letters_remaining, "different letters remain!")
 
         letter = input('Please guess a letter: ')
         if letter in lettersGuessed:
