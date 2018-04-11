@@ -24,7 +24,13 @@ class Words:
 
         print("  ", len(wordlist), "words loaded.")
 
-        return random.choice(wordlist)
+        return wordlist
+
+    def chooseSecretword(self, letters_dif, guesses, wordlist):
+        while letters_dif > guesses:
+            secretWord = random.choice(wordlist).lower()
+
+        return secretWord
 
 
 class GuessWhat:
@@ -72,26 +78,23 @@ class Letter:
     def __init__(self):
         import string
         # 'abcdefghijklmnopqrstuvwxyz'
-        self.available = string.ascii_lowercase
+        self.alfa = string.ascii_lowercase
 
-    def getAvailableLetters(self):
-        return self.available
+    def getAlfa(self):
+        return self.alfa
 
-    def showAvailable(self, available):
+    def showAlfa(self, available):
         print('Available letters', available)
 
-    def letterDif(self, letter_dif, secretWord):
+    def letterDif(self, alfa, secretWord):
         count_letter = 0
 
         for letter in secretWord:
-            if letter in letter_dif:
-                count_letter += 1
-                letter_dif.replace('letter', '')
+            if letter in alfa:
+                count_letter = count_letter + 1
+                alfa.replace('letter', '')
 
-        return count_letter
-
-    def funcname(self, parameter_list):
-        pass
+        return [count_letter, alfa]
 
 
 def hangman():
@@ -100,9 +103,19 @@ def hangman():
     guess_what = GuessWhat()
     available_letter = Letter()
 
-    secretWord = words.loadWords().lower()
+    secretWord = ''
+    letters_dif = 27
+    alfa = available_letter.getAlfa()
     guesses = guess_what.getGuesses()
+
+    wordlist = words.loadWords()
+
+    while letters_dif > guesses:
+        secretWord = random.choice(wordlist).lower()
+        letters_dif = available_letter.letterDif(alfa, secretWord)[0]
+
     lettersGuessed = []
+    available_alfa = available_letter.getAlfa()
 
     print('Welcome to the game, Hangam!')
     print('I am thinking of a word that is', len(secretWord), ' letters long.')
@@ -114,14 +127,17 @@ def hangman():
         guesses = guess_what.getGuesses()
         guess_what.showGuesses(guesses)
 
-        available = available_letter.getAvailableLetters()
+        alfa = available_letter.getAlfa()
 
-        for letter in available:
+        for letter in alfa:
             if letter in lettersGuessed:
-                available = available.replace(letter, '')
+                alfa = alfa.replace(letter, '')
 
-        available_letter.showAvailable(available)
-        letters_remaining = available_letter.letterDif(available, secretWord)
+        available_letter.showAlfa(alfa)
+        var_aux = available_letter.letterDif(available_alfa,
+                                             secretWord)
+        letters_remaining = var_aux[0]
+        available_alfa = var_aux[1]
 
         print(letters_remaining, "different letters remain!")
 
