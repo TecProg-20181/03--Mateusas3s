@@ -92,9 +92,9 @@ class Letter:
         for letter in secretWord:
             if letter in alfa:
                 count_letter = count_letter + 1
-                alfa.replace('letter', '')
+                alfa = alfa.replace(letter, '')
 
-        return [count_letter, alfa]
+        return count_letter
 
 
 def hangman():
@@ -112,13 +112,13 @@ def hangman():
 
     while letters_dif > guesses:
         secretWord = random.choice(wordlist).lower()
-        letters_dif = available_letter.letterDif(alfa, secretWord)[0]
+        letters_dif = available_letter.letterDif(alfa, secretWord)
 
     lettersGuessed = []
-    available_alfa = available_letter.getAlfa()
 
     print('Welcome to the game, Hangam!')
     print('I am thinking of a word that is', len(secretWord), ' letters long.')
+    print(letters_dif, "different letters in word!")
     print('-------------')
 
     while(not(guess_what.isWordGuessed(secretWord, lettersGuessed))
@@ -134,12 +134,6 @@ def hangman():
                 alfa = alfa.replace(letter, '')
 
         available_letter.showAlfa(alfa)
-        var_aux = available_letter.letterDif(available_alfa,
-                                             secretWord)
-        letters_remaining = var_aux[0]
-        available_alfa = var_aux[1]
-
-        print(letters_remaining, "different letters remain!")
 
         letter = input('Please guess a letter: ')
         if letter in lettersGuessed:
