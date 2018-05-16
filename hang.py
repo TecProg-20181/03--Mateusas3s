@@ -1,5 +1,6 @@
 import random
 import sys
+import string
 
 
 class Words:
@@ -36,12 +37,6 @@ class Words:
 
         return wordlist
 
-    def chooseSecretword(self, letters_dif, guesses, wordlist):
-        while letters_dif > guesses:
-            secretWord = random.choice(wordlist).lower()
-
-        return secretWord
-
 
 class GuessWhat:
 
@@ -63,6 +58,7 @@ class GuessWhat:
         return True
 
     def guessLetter(self, guessed, secretWord, lettersGuessed):
+
         for letter in secretWord:
             if letter in lettersGuessed:
                 guessed += letter
@@ -86,7 +82,6 @@ class GuessWhat:
 class Letter:
 
     def __init__(self):
-        import string
         # 'abcdefghijklmnopqrstuvwxyz'
         self.alfa = string.ascii_lowercase
 
@@ -120,6 +115,8 @@ def hangman():
 
     wordlist = words.loadWords()
 
+    # verificar se todas as palavras do arquivo tem a quantidade de
+    # letra maior que o número de tentativas
     while letters_dif > guesses:
         secretWord = random.choice(wordlist).lower()
         letters_dif = available_letter.letterDif(alfa, secretWord)
@@ -146,6 +143,7 @@ def hangman():
         available_letter.showAlfa(alfa)
 
         letter = input('Please guess a letter: ')
+
         if letter in lettersGuessed:
             guessed = guess_what.guessLetter(guess_what.getGuessedWord(),
                                              secretWord,
@@ -158,6 +156,9 @@ def hangman():
                                              secretWord,
                                              lettersGuessed)
             print('Good Guess: ', guessed)
+        
+        elif letter not in string.ascii_lowercase:
+            print("Please, enter only one letter")
 
         else:
             guess_what.putGuesses(guesses - 1)
