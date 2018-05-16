@@ -1,10 +1,11 @@
 import random
+import sys
 
 
 class Words:
 
     def __init__(self):
-        self.wordlist_filename = "palavras.txt"
+        self.wordlist_filename = "words.txt"
 
     def getWordlistFilename(self):
         return self.wordlist_filename
@@ -16,7 +17,12 @@ class Words:
         """
         print("Loading word list from file...")
 
-        inFile = open(self.wordlist_filename, 'r')
+        try:
+            inFile = open(self.wordlist_filename, 'r')
+
+        except FileNotFoundError:
+            print("File", self.wordlist_filename, "not found!")
+            sys.exit(0)
 
         line = inFile.readline()
 
