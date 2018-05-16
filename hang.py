@@ -26,6 +26,10 @@ class Words:
 
         line = inFile.readline()
 
+        if not line:
+            print("Words not found!")
+            sys.exit(0)
+
         wordlist = line.split()
 
         print("  ", len(wordlist), "words loaded.")
