@@ -28,12 +28,14 @@ class Words:
         line = inFile.readline()
 
         if not line:
-            print("Words not found!")
+            print("Words not found in file!")
             sys.exit(0)
 
         wordlist = line.split()
 
         print("  ", len(wordlist), "words loaded.")
+
+        inFile.close()
 
         return wordlist
 
@@ -82,7 +84,6 @@ class GuessWhat:
 class Letter:
 
     def __init__(self):
-        # 'abcdefghijklmnopqrstuvwxyz'
         self.alfa = string.ascii_lowercase
 
     def getAlfa(self):
@@ -102,7 +103,7 @@ class Letter:
         return count_letter
 
 
-def hangman():
+def hangMain():
     # Creating objects ---------------------
     words = Words()
     guess_what = GuessWhat()
@@ -129,7 +130,7 @@ def hangman():
     print('-------------')
 
     while(not(guess_what.isWordGuessed(secretWord, lettersGuessed))
-          and guesses > 0):
+          and guesses-1 > 0):
 
         guesses = guess_what.getGuesses()
         guess_what.showGuesses(guesses)
@@ -156,9 +157,9 @@ def hangman():
                                              secretWord,
                                              lettersGuessed)
             print('Good Guess: ', guessed)
-        
+
         elif letter not in string.ascii_lowercase:
-            print("Please, enter only one letter")
+            print("Please, enter only one lowercase letter")
 
         else:
             guess_what.putGuesses(guesses - 1)
@@ -178,4 +179,4 @@ def hangman():
                   secretWord, '.')
 
 
-hangman()
+hangMain()
